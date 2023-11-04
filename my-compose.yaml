@@ -1,0 +1,31 @@
+version: '3'
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: my-wordpress
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpressdb
+    volumes:
+      - ./my-wordpress:/var/www/html
+
+  db:
+    image: mysql:5.7
+    container_name: my-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpressdb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+  nginx:
+    image: nginx:latest
+    container_name: my-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./my-wordpress:/usr/share/nginx/html
